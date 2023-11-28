@@ -1,0 +1,77 @@
+---
+global:
+  gc: {{.GC}}
+  gcMetrics: {{.GC_METRICS}}
+  indexerConfig:
+    esServers: ["{{.ES_SERVER}}"]
+    insecureSkipVerify: true
+    defaultIndex: {{.ES_INDEX}}
+    type: {{.INDEXING_TYPE}}
+  measurements:
+    - name: podLatency
+      thresholds:
+        - conditionType: Ready
+          metric: P99
+          threshold: {{.POD_READY_THRESHOLD}}
+jobs:
+  - name: gateway-route
+    namespace: istio-system
+    jobIterations: 1
+    skipIndexing: true
+    verifyObjects: false
+    preLoadImages: false
+    cleanup: true
+    namespacedIterations: false
+    objects:
+      - objectTemplate: gateway-route.yml
+        replicas: 1
+
+  - name: sm-density
+    namespace: sm-density
+    jobIterations: {{.JOB_ITERATIONS}}
+    qps: {{.QPS}}
+    burst: {{.BURST}}
+    namespacedIterations: true
+    podWait: false
+    waitWhenFinished: true
+    preLoadImages: false
+    preLoadPeriod: 15s
+    churn: {{.CHURN}}
+    churnDuration: {{.CHURN_DURATION}}
+    churnPercent: {{.CHURN_PERCENT}}
+    churnDelay: {{.CHURN_DELAY}}
+    namespaceLabels:
+      security.openshift.io/scc.podSecurityLabelSync: false
+      pod-security.kubernetes.io/enforce: privileged
+      pod-security.kubernetes.io/audit: privileged
+      pod-security.kubernetes.io/warn: privileged
+      istio-injection: enabled
+    objects:
+
+      - objectTemplate: deployment-server.yml
+        replicas: 3
+        inputVars:
+          podReplicas: 2
+
+      - objectTemplate: deployment-client.yml
+        replicas: 3
+        inputVars:
+          podReplicas: 2
+          ingressDomain: {{.INGRESS_DOMAIN}}
+
+      - objectTemplate: gateway.yml
+        replicas: 1
+        inputVars:
+          ingressDomain: {{.INGRESS_DOMAIN}}
+
+      - objectTemplate: virtualservice.yml
+        replicas: 3
+
+      - objectTemplate: service.yml
+        replicas: 3
+        
+      - objectTemplate: secret.yml
+        replicas: 4
+
+      - objectTemplate: configmap.yml
+        replicas: 4

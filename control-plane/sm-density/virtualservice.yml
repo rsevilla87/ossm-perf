@@ -1,0 +1,18 @@
+kind: VirtualService
+apiVersion: networking.istio.io/v1beta1
+metadata:
+  name: sm-density-{{.Replica}}
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - cd-gw
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: sm-density-{{.Replica}}
+        port:
+          number: 8080
