@@ -14,20 +14,9 @@ global:
           metric: P99
           threshold: {{.POD_READY_THRESHOLD}}
 jobs:
-  - name: gateway-route
-    namespace: istio-system
-    jobIterations: 1
-    skipIndexing: true
-    verifyObjects: false
-    preLoadImages: false
-    cleanup: true
-    namespacedIterations: false
-    objects:
-      - objectTemplate: gateway-route.yml
-        replicas: 1
 
-  - name: sm-density
-    namespace: sm-density
+  - name: cluster-density-sm
+    namespace: cluster-density-sm
     jobIterations: {{.JOB_ITERATIONS}}
     qps: {{.QPS}}
     burst: {{.BURST}}
@@ -65,7 +54,7 @@ jobs:
           ingressDomain: {{.INGRESS_DOMAIN}}
 
       - objectTemplate: virtualservice.yml
-        replicas: 3
+        replicas: 1
 
       - objectTemplate: service.yml
         replicas: 3
@@ -75,3 +64,9 @@ jobs:
 
       - objectTemplate: configmap.yml
         replicas: 4
+
+      - objectTemplate: route.yml
+        replicas: 1
+        inputVars:
+          ingressDomain: {{.INGRESS_DOMAIN}}
+

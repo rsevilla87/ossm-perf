@@ -1,0 +1,36 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  annotations:
+    sidecar.istio.io/inject: "true"
+  labels:
+    name: sm-node-density-{{.Iteration}}
+    app: pause
+  name: {{.JobName}}-{{.Iteration}}
+spec:
+  topologySpreadConstraints:
+  - maxSkew: 1 
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: ScheduleAnyway 
+    labelSelector: 
+      matchLabels:
+        app: pause
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/worker
+            operator: Exists
+          - key: node-role.kubernetes.io/infra
+            operator: DoesNotExist
+          - key: node-role.kubernetes.io/workload
+            operator: DoesNotExist
+  containers:
+  - image: {{.containerImage}}
+    name: sm-node-density
+    resources:
+      requests:
+        memory: "10Mi"
+        cpu: "10m"
+    imagePullPolicy: IfNotPresent

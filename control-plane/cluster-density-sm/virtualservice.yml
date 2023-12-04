@@ -1,0 +1,26 @@
+kind: VirtualService
+apiVersion: networking.istio.io/v1beta1
+metadata:
+  name: {{.JobName}}
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - cd-gw
+  http:
+  - route:
+    - weight: 33
+      destination:
+        host: {{.JobName}}-1
+        port:
+          number: 8080
+    - weight: 33
+      destination:
+        host: {{.JobName}}-2
+        port:
+          number: 8080
+    - weight: 33
+      destination:
+        host: {{.JobName}}-3
+        port:
+          number: 8080

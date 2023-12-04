@@ -1,7 +1,8 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: gateway-route
+  namespace: istio-system
+  name: {{.JobName}}-{{.Iteration}}
 spec:
   port:
     targetPort: http2
@@ -10,3 +11,4 @@ spec:
     name: istio-ingressgateway
   tls:
     termination: edge
+  host: {{.JobName}}-{{.Iteration}}.{{.ingressDomain}}

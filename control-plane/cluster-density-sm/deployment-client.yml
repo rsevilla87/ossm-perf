@@ -50,7 +50,9 @@ spec:
             command:
             - "/bin/sh"
             - "-c"
-            - "curl --fail -sS ${SERVICE_ENDPOINT} -o /dev/null && curl -H 'Host: {{.JobName}}-{{.Iteration}}.{{.ingressDomain}}' --fail -sS ${ROUTE_ENDPOINT} -o /dev/null"
+            - |
+              curl --fail -sS ${SERVICE_ENDPOINT} -o /dev/null || exit 1
+              curl --fail -sSk ${ROUTE_ENDPOINT} -o /dev/null || exit 1
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3
@@ -83,9 +85,9 @@ spec:
         - name: ENVVAR4
           value: "{{randAlphaNum 250}}"
         - name: ROUTE_ENDPOINT
-          value: "http://gateway-route-istio-system.{{ .ingressDomain }}/256.html"
+          value: "https://{{.JobName}}-{{.Iteration}}.{{.ingressDomain}}/256.html"
         - name: SERVICE_ENDPOINT
-          value: "http://sm-density-{{.Replica}}:8080/256.html"
+          value: "http://cluster-density-sm-{{.Replica}}:8080/256.html"
       volumes:
       - name: secret-1
         secret:

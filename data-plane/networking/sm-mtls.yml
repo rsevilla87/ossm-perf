@@ -1,0 +1,74 @@
+---
+# STRICT mTLS only allows communication through services: https://github.com/istio/istio/issues/37431
+# Workload Through Service
+TCPStreamServiceSmall:
+   parallelism: 1
+   profile: "TCP_STREAM"
+   duration: 30
+   samples: 2
+   messagesize: 64
+   service: True
+
+TCPStreamService:
+   parallelism: 1
+   profile: "TCP_STREAM"
+   duration: 30
+   samples: 2
+   messagesize: 1024
+   service: True
+
+TCPStreamServiceMed:
+   parallelism: 1
+   profile: "TCP_STREAM"
+   duration: 30
+   samples: 2
+   messagesize: 4096 
+   service: True
+
+TCPStreamServiceLrg:
+   parallelism: 1
+   profile: "TCP_STREAM"
+   duration: 30
+   samples: 2
+   messagesize:  8192 
+   service: True
+
+UDPStreamServiceSmall:
+   parallelism: 1
+   profile: "UDP_STREAM"
+   duration: 30
+   samples: 2
+   messagesize: 64
+   service: True
+
+UDPStreamService:
+   parallelism: 1
+   profile: "UDP_STREAM"
+   duration: 30
+   samples: 2
+   messagesize: 1024
+   service: True
+
+UDPStreamServiceMed:
+   parallelism: 1
+   profile: "UDP_STREAM"
+   duration: 30
+   samples: 2
+   messagesize: 4096 
+   service: True
+
+UDPStreamServiceLrg:
+   parallelism: 1
+   profile: "UDP_STREAM"
+   duration: 30
+   samples: 2
+   messagesize:  8192 
+   service: True
+
+RRService:
+   parallelism: 1
+   profile: "TCP_RR"
+   duration: 30
+   samples: 2
+   messagesize: 1024
+   service: True

@@ -7,13 +7,13 @@ spec:
   replicas: {{.podReplicas}}
   selector:
     matchLabels:
-      name: sm-density-{{.Replica}}
+      name: server-{{.Replica}}
   template:
     metadata:
       annotations:
         sidecar.istio.io/inject: "true"
       labels:
-        name: sm-density-{{.Replica}}
+        name: server-{{.Replica}}
         app: nginx
     spec:
       topologySpreadConstraints:
@@ -65,7 +65,7 @@ spec:
           protocol: TCP
         - containerPort: 8443
           protocol: TCP
-        name: sm-density
+        name: server
         env:
         - name: ENVVAR1
           value: "{{randAlphaNum 250}}"
