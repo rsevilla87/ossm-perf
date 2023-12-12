@@ -38,7 +38,7 @@
   metricName: nodeCPU-Masters
 
 - query: (sum(irate(node_cpu_seconds_total[2m])) by (mode,instance) and on (instance) label_replace(kube_node_role{role="worker"}, "instance", "$1", "node", "(.+)")) > 0
-  metricName: nodeCPU-AggregatedWorkers
+  metricName: nodeCPU-Workers
 
 - query: (sum(irate(node_cpu_seconds_total[2m])) by (mode,instance) and on (instance) label_replace(kube_node_role{role="infra"}, "instance", "$1", "node", "(.+)")) > 0
   metricName: nodeCPU-Infra
@@ -46,7 +46,7 @@
 # We compute memory utilization by subtracting available memory to the total
 
 - query: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) and on (instance) label_replace(kube_node_role{role="worker"}, "instance", "$1", "node", "(.+)")
-  metricName: nodeMemoryUtilization-AggregatedWorkers
+  metricName: nodeMemoryUtilization-Workers
 
 - query: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) and on (instance) label_replace(kube_node_role{role="master"}, "instance", "$1", "node", "(.+)")
   metricName: nodeMemoryUtilization-Masters
@@ -56,7 +56,7 @@
 
 # Etcd metrics
 
-- query: sum(rate(etcd_server_leader_changes_seen_total[2m]))
+- query: sum(rate(etcd_server_leader_changes_seen_total[2m])) > 0
   metricName: etcdLeaderChangesRate
 
 - query: histogram_quantile(0.99, rate(etcd_disk_backend_commit_duration_seconds_bucket[2m]))
@@ -74,10 +74,10 @@
 
 # Istio metrics
 
-- query: sum(irate(container_cpu_usage_seconds_total{name!="",container!="POD",namespace=~"istio-system"}[2m]) * 100) by (container, pod) > 0
+- query: sum(irate(container_cpu_usage_seconds_total{name!="",container!="POD",namespace=~"istio-system"}[2m]) * 100) by (pod) > 0
   metricName: istio-system-cpu
 
-- query: sum(container_memory_working_set_bytes{name!="",container!="POD",namespace="istio-system"}) by (container, pod)
+- query: sum(container_memory_working_set_bytes{name!="",container!="POD",namespace="istio-system"}) by (pod)
   metricName: istio-system-memory
 
 - query: sum(irate(container_cpu_usage_seconds_total{container="istio-proxy", namespace!="istio-system"}[2m]) * 100) > 0
