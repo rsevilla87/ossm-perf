@@ -23,12 +23,13 @@ jobs:
     namespacedIterations: true
     podWait: false
     waitWhenFinished: true
-    preLoadImages: false
+    preLoadImages: true
     preLoadPeriod: 15s
     churn: {{.CHURN}}
     churnDuration: {{.CHURN_DURATION}}
     churnPercent: {{.CHURN_PERCENT}}
     churnDelay: {{.CHURN_DELAY}}
+    jobPause: 2m
     namespaceLabels:
       security.openshift.io/scc.podSecurityLabelSync: false
       pod-security.kubernetes.io/enforce: privileged
@@ -37,16 +38,10 @@ jobs:
       istio-injection: enabled
     objects:
 
-      - objectTemplate: deployment-server.yml
-        replicas: 3
+      - objectTemplate: gen-load-cm.yml
+        replicas: 2
         inputVars:
-          podReplicas: 2
-
-      - objectTemplate: deployment-client.yml
-        replicas: 3
-        inputVars:
-          podReplicas: 2
-          ingressDomain: {{.INGRESS_DOMAIN}}
+          rps: 50
 
       - objectTemplate: gateway.yml
         replicas: 1
@@ -57,16 +52,21 @@ jobs:
         replicas: 1
 
       - objectTemplate: service.yml
-        replicas: 3
+        replicas: 2
         
-      - objectTemplate: secret.yml
-        replicas: 4
-
-      - objectTemplate: configmap.yml
-        replicas: 4
-
       - objectTemplate: route.yml
         replicas: 1
         inputVars:
+          ingressDomain: {{.INGRESS_DOMAIN}}
+
+      - objectTemplate: deployment-server.yml
+        replicas: 2
+        inputVars:
+          podReplicas: 2
+
+      - objectTemplate: deployment-client.yml
+        replicas: 2
+        inputVars:
+          podReplicas: 2
           ingressDomain: {{.INGRESS_DOMAIN}}
 

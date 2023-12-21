@@ -9,18 +9,13 @@ spec:
   - cd-gw
   http:
   - route:
-    - weight: 33
+    - weight: 50
       destination:
         host: {{.JobName}}-1
         port:
           number: 8080
-    - weight: 33
+    - weight: 50
       destination:
         host: {{.JobName}}-2
-        port:
-          number: 8080
-    - weight: 33
-      destination:
-        host: {{.JobName}}-3
         port:
           number: 8080

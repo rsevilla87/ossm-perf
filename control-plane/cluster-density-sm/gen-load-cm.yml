@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: load-{{.JobName}}-{{.Replica}}
+data:
+  load.sh: |-
+    #!/bin/sh
+    while true; do
+      hloader -u ${SERVICE_ENDPOINT} -r {{.rps}} -d 1m
+    done
+
