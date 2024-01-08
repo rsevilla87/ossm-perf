@@ -1,74 +1,121 @@
 ---
 # STRICT mTLS only allows communication through services: https://github.com/istio/istio/issues/37431
 # Workload Through Service
-TCPStreamServiceSmall:
-   parallelism: 1
-   profile: "TCP_STREAM"
-   duration: 30
-   samples: 2
-   messagesize: 64
-   service: True
+tests:
 
-TCPStreamService:
-   parallelism: 1
-   profile: "TCP_STREAM"
-   duration: 30
-   samples: 2
-   messagesize: 1024
-   service: True
+# Pod 2 service
 
-TCPStreamServiceMed:
-   parallelism: 1
-   profile: "TCP_STREAM"
-   duration: 30
-   samples: 2
-   messagesize: 4096 
-   service: True
+- TCPStreamServiceSmall:
+  parallelism: 1
+  profile: "TCP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 64
+  service: True
 
-TCPStreamServiceLrg:
-   parallelism: 1
-   profile: "TCP_STREAM"
-   duration: 30
-   samples: 2
-   messagesize:  8192 
-   service: True
+- TCPStreamService:
+  parallelism: 1
+  profile: "TCP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 1024
+  service: True
 
-UDPStreamServiceSmall:
-   parallelism: 1
-   profile: "UDP_STREAM"
-   duration: 30
-   samples: 2
-   messagesize: 64
-   service: True
+- UDPStreamServiceSmall:
+  parallelism: 1
+  profile: "UDP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 64
+  service: True
 
-UDPStreamService:
-   parallelism: 1
-   profile: "UDP_STREAM"
-   duration: 30
-   samples: 2
-   messagesize: 1024
-   service: True
+- UDPStreamService:
+  parallelism: 1
+  profile: "UDP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 1024
+  service: True
 
-UDPStreamServiceMed:
-   parallelism: 1
-   profile: "UDP_STREAM"
-   duration: 30
-   samples: 2
-   messagesize: 4096 
-   service: True
+# Pod 2 pod
 
-UDPStreamServiceLrg:
-   parallelism: 1
-   profile: "UDP_STREAM"
-   duration: 30
-   samples: 2
-   messagesize:  8192 
-   service: True
+- TCPStreamSmall:
+  parallelism: 1
+  profile: "TCP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 64
+  service: false
 
-RRService:
-   parallelism: 1
-   profile: "TCP_RR"
-   duration: 30
-   samples: 2
-   messagesize: 1024
-   service: True
+- TCPStreamSmall2s:
+  parallelism: 2
+  profile: "TCP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 64
+
+- TCPStream:
+  parallelism: 1
+  profile: "TCP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 1024
+  service: false
+
+- TCPStream2s:
+  parallelism: 2
+  profile: "TCP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 1024
+  service: false
+
+- UDPStreamSmall:
+  parallelism: 1
+  profile: "UDP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 64
+  service: false
+
+- UDPStreamSmall2s:
+  parallelism: 2
+  profile: "UDP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 64
+  service: false
+
+- UDPStream:
+  parallelism: 1
+  profile: "UDP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 1024
+  service: false
+
+- UDPStream2s:
+  parallelism: 2
+  profile: "UDP_STREAM"
+  duration: 10
+  samples: 2
+  messagesize: 1024
+  service: false
+
+# Latency - RR
+
+- RR-TCP:
+  parallelism: 1
+  profile: "TCP_RR"
+  duration: 10
+  samples: 2
+  messagesize: 1024
+  service: false
+
+- RRService-TCP:
+  parallelism: 1
+  profile: "TCP_RR"
+  duration: 10
+  samples: 2
+  messagesize: 1024
+  service: true
