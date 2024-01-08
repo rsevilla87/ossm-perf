@@ -4,102 +4,153 @@
 tests:
 
 # Pod 2 service
-
+# TCP
 - TCPStreamServiceSmall:
   parallelism: 1
   profile: "TCP_STREAM"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 64
   service: True
 
-- TCPStreamService:
+- TCPStreamServiceMed:
   parallelism: 1
   profile: "TCP_STREAM"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 1024
   service: True
+
+- TCPStreamServiceLarge:
+  parallelism: 1
+  profile: "TCP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 8192
+  service: True
+
+# UDP
 
 - UDPStreamServiceSmall:
   parallelism: 1
   profile: "UDP_STREAM"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 64
   service: True
 
-- UDPStreamService:
+- UDPStreamServiceMed:
   parallelism: 1
   profile: "UDP_STREAM"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 1024
+  service: True
+
+- UDPStreamServiceLarge:
+  parallelism: 1
+  profile: "UDP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 8192
   service: True
 
 # Pod 2 pod
-
+# TCP
 - TCPStreamSmall:
   parallelism: 1
   profile: "TCP_STREAM"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 64
   service: false
 
-- TCPStreamSmall2s:
-  parallelism: 2
-  profile: "TCP_STREAM"
-  duration: 10
-  samples: 2
-  messagesize: 64
-
-- TCPStream:
+- TCPStreamMed:
   parallelism: 1
   profile: "TCP_STREAM"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 1024
   service: false
 
-- TCPStream2s:
+- TCPStreamLarge:
+  parallelism: 1
+  profile: "TCP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 8192
+  service: false
+
+- TCPStreamSmall2:
   parallelism: 2
   profile: "TCP_STREAM"
-  duration: 10
+  duration: 30
+  samples: 2
+  messagesize: 64
+
+- TCPStreamMed2:
+  parallelism: 2
+  profile: "TCP_STREAM"
+  duration: 30
   samples: 2
   messagesize: 1024
   service: false
 
+- TCPStreamLarge2:
+  parallelism: 2
+  profile: "TCP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 8192
+  service: false
+
+# UDP
 - UDPStreamSmall:
   parallelism: 1
   profile: "UDP_STREAM"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 64
   service: false
 
-- UDPStreamSmall2s:
-  parallelism: 2
-  profile: "UDP_STREAM"
-  duration: 10
-  samples: 2
-  messagesize: 64
-  service: false
-
-- UDPStream:
+- UDPStreamMed:
   parallelism: 1
   profile: "UDP_STREAM"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 1024
   service: false
 
-- UDPStream2s:
+- UDPStreamLarge:
+  parallelism: 1
+  profile: "UDP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 8192
+  service: false
+
+- UDPStreamSmall2:
   parallelism: 2
   profile: "UDP_STREAM"
-  duration: 10
+  duration: 30
+  samples: 2
+  messagesize: 64
+  service: false
+
+- UDPStreamMed2:
+  parallelism: 2
+  profile: "UDP_STREAM"
+  duration: 30
   samples: 2
   messagesize: 1024
+  service: false
+
+- UDPStreamLarge2:
+  parallelism: 2
+  profile: "UDP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 8102
   service: false
 
 # Latency - RR
@@ -107,7 +158,7 @@ tests:
 - RR-TCP:
   parallelism: 1
   profile: "TCP_RR"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 1024
   service: false
@@ -115,7 +166,7 @@ tests:
 - RRService-TCP:
   parallelism: 1
   profile: "TCP_RR"
-  duration: 10
+  duration: 30
   samples: 2
   messagesize: 1024
   service: true
