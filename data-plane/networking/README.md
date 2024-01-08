@@ -9,7 +9,8 @@ The test scenarios are very similar to the ones executed in regular OpenShift (b
 Pod 2 pod and pod 2 service:
 
 - TCP_STREAM/UDP_STREAM: The stream scenarios are meant to benchmark TCP/UDP network throughput using different packet sizes
-  - Message sizes: 64, 1024, 4096 and 8192
+  - Message sizes: 64, 4096 and 8192
+  - Streams: 1 and 2 (for pod 2 pod only)
 - TCP_RR. Request/response test meant to benchmark TCP network latency
   - Message sizes: 1024
 - mtLS true/false
@@ -17,7 +18,8 @@ Pod 2 pod and pod 2 service:
 Node 2 node:
 
 - TCP_STREAM/UDP_STREAM: The stream scenarios are meant to benchmark TCP/UDP network throughput using different packet sizes
-  - Message sizes: 64, 1024, 4096 and 8192
+  - Message sizes: 64, 4096 and 8192
+  - Streams: 1 and 2 (for pod 2 pod only)
 - TCP_RR. Request/response test meant to benchmark TCP network latency
   - Message sizes: 1024
 
@@ -32,7 +34,3 @@ node 2 node tests don't use the overlay network, traffic travels directly from t
 
 pod 2 pod fails with mTLS: https://github.com/istio/istio/issues/37431
 
-
-# Ingress
-
-WIP
