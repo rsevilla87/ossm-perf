@@ -1,0 +1,5 @@
+# API server
+
+- query: sum(irate(istio_requests_total{reporter="source"}[2m])) by (response_code)
+  metricName: requests-rate
+
