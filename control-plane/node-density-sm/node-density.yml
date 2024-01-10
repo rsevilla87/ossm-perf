@@ -23,7 +23,7 @@ jobs:
     podWait: false
     waitWhenFinished: true
     jobPause: 2m
-    preLoadImages: false
+    preLoadImages: true
     preLoadPeriod: 10s
     namespaceLabels:
       security.openshift.io/scc.podSecurityLabelSync: false
