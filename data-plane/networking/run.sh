@@ -7,5 +7,9 @@ if [[ ${SIDECAR} == "true" ]]; then
 fi
 oc create sa netperf -n netperf
 oc adm policy add-scc-to-user hostnetwork -z netperf -n netperf
-./k8s-netperf --all --config ${1} --search ${2}
+if [[ $2 != "" ]]; then
+  ./k8s-netperf --all --config ${1} --search ${2}
+else
+  ./k8s-netperf --all --config ${1}
+fi
 oc delete ns netperf
