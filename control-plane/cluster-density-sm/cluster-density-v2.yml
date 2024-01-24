@@ -15,6 +15,19 @@ global:
           threshold: {{.POD_READY_THRESHOLD}}
 jobs:
 
+  - name: create-namespaces
+    namespace: create-namespaces
+    qps: {{.QPS}}
+    burst: {{.BURST}}
+    jobIterations: {{.JOB_ITERATIONS}}
+    waitWhenFinished: false
+    cleanup: true
+    jobPause: 30s
+    skipIndexing: true
+    objects:
+      - objectTemplate: namespace.yml
+        replicas: 1
+
   - name: cluster-density-sm
     namespace: cluster-density-sm
     jobIterations: {{.JOB_ITERATIONS}}
@@ -22,6 +35,7 @@ jobs:
     burst: {{.BURST}}
     namespacedIterations: true
     podWait: false
+    cleanup: true
     waitWhenFinished: true
     preLoadImages: true
     preLoadPeriod: 15s
@@ -30,12 +44,6 @@ jobs:
     churnPercent: {{.CHURN_PERCENT}}
     churnDelay: {{.CHURN_DELAY}}
     jobPause: 2m
-    namespaceLabels:
-      security.openshift.io/scc.podSecurityLabelSync: false
-      pod-security.kubernetes.io/enforce: privileged
-      pod-security.kubernetes.io/audit: privileged
-      pod-security.kubernetes.io/warn: privileged
-      istio-injection: enabled
     objects:
 
       - objectTemplate: gen-load-cm.yml
