@@ -17,8 +17,8 @@ jobs:
 
   - name: create-namespaces
     namespace: create-namespaces
-    qps: {{.QPS}}
-    burst: {{.BURST}}
+    qps: 10
+    burst: 10
     jobIterations: {{.JOB_ITERATIONS}}
     waitWhenFinished: false
     cleanup: true
@@ -31,8 +31,8 @@ jobs:
   - name: cluster-density-sm
     namespace: cluster-density-sm
     jobIterations: {{.JOB_ITERATIONS}}
-    qps: {{.QPS}}
-    burst: {{.BURST}}
+    qps: 10
+    burst: 10
     namespacedIterations: true
     podWait: false
     cleanup: true
