@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: load-{{.JobName}}
+data:
+  load.sh: |-
+    #!/bin/sh
+    while true; do
+    {{ if eq .protocol "https" }}
+      hloader --http2={{.http2}} -u {{.protocol}}://{{.JobName}}:8443/128.html -r {{.rps}} -d 1m
+    {{ else }}
+      hloader --http2={{.http2}} -u {{.protocol}}://{{.JobName}}:8080/128.html -r {{.rps}} -d 1m
+    {{- end }}
+    done

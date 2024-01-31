@@ -1,0 +1,60 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: client
+spec:
+  replicas: {{.podReplicas}}
+  selector:
+    matchLabels:
+      name: client
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        name: client
+        app: client
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1 
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway 
+        labelSelector: 
+          matchLabels:
+            app: client
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: Exists
+              - key: node-role.kubernetes.io/infra
+                operator: DoesNotExist
+              - key: node-role.kubernetes.io/workload
+                operator: DoesNotExist
+      containers:
+      - name: client-app
+        image: quay.io/cloud-bulldozer/hloader:latest
+        command: ["./load/load.sh"]
+        resources:
+          requests:
+            memory: "10Mi"
+            cpu: "10m"
+        env:
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: false
+        volumeMounts:
+        - name: load
+          mountPath: /load
+      volumes:
+      - name: load
+        configMap:
+          name: load-{{.JobName}}
+          defaultMode: 0750
+      restartPolicy: Always
+  strategy:
+    type: RollingUpdate
+

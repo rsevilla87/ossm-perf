@@ -1,0 +1,13 @@
+kind: VirtualService
+apiVersion: networking.istio.io/v1beta1
+metadata:
+  name: {{.JobName}}
+spec:
+  hosts:
+  - {{.JobName}}
+  http:
+  - route:
+    - destination:
+        host: {{.JobName}}
+        port:
+          number: {{.dstPort}}
