@@ -52,7 +52,7 @@ spec:
       volumes:
       - name: load
         configMap:
-          name: load-{{.JobName}}
+          name: gen-load
           defaultMode: 0750
       restartPolicy: Always
   strategy:

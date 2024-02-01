@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: load-{{.JobName}}
+  name: gen-load
 data:
   load.sh: |-
     #!/bin/sh

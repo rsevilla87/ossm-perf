@@ -9,7 +9,7 @@ global:
     type: {{.INDEXING_TYPE}}
 jobs:
 
-  - name: create-namespaces
+  - name: envoy-scale
     namespace: envoy-scale
     qps: 10
     burst: 10
@@ -17,9 +17,8 @@ jobs:
     waitWhenFinished: false
     cleanup: true
     jobPause: 30s
+    preLoadImages: false
     skipIndexing: true
-    namespaceLabels:
-      istio-injection: enabled
     objects:
       - objectTemplate: namespace.yml
         replicas: 1
@@ -36,14 +35,12 @@ jobs:
     preLoadPeriod: 10s
     verifyObjects: false
     namespacedIterations: true
-    namespaceLabels:
-      istio-injection: enabled
     objects:
       - objectTemplate: gen-load.yml
         replicas: 1
         inputVars:
-          rps: 100       # Per pod RPS
-          protocol: http # Can be either http or https
+          rps: 100        # Per pod RPS
+          protocol: http  # Can be either http or https
           http2: true
 
       - objectTemplate: server.yml
@@ -78,14 +75,12 @@ jobs:
     preLoadImages: false
     verifyObjects: false
     namespacedIterations: true
-    namespaceLabels:
-      istio-injection: enabled
     objects:
       - objectTemplate: gen-load.yml
         replicas: 1
         inputVars:
-          rps: 100       # Per pod RPS
-          protocol: http # Can be either http or https
+          rps: 100        # Per pod RPS
+          protocol: http  # Can be either http or https
           http2: true
 
       - objectTemplate: server.yml
@@ -120,14 +115,12 @@ jobs:
     preLoadImages: false
     verifyObjects: false
     namespacedIterations: true
-    namespaceLabels:
-      istio-injection: enabled
     objects:
       - objectTemplate: gen-load.yml
         replicas: 1
         inputVars:
-          rps: 100       # Per pod RPS
-          protocol: http # Can be either http or https
+          rps: 100        # Per pod RPS
+          protocol: http  # Can be either http or https
           http2: true
 
       - objectTemplate: server.yml
@@ -151,87 +144,83 @@ jobs:
       - objectTemplate: service.yml
         replicas: 1
 
-#  - name: rps-80k
-#    namespace: envoy-scale
-#    qps: 10
-#    burst: 10
-#    jobIterations: 8
-#    waitWhenFinished: true
-#    cleanup: false
-#    jobPause: 2m
-#    preLoadImages: false
-#    verifyObjects: false
-#    namespacedIterations: true
-#    namespaceLabels:
-#      istio-injection: enabled
-#    objects:
-#      - objectTemplate: gen-load.yml
-#        replicas: 1
-#        inputVars:
-#          rps: 100       # Per pod RPS
-#          protocol: http # Can be either http or https
-#          http2: true
-#
-#      - objectTemplate: server.yml
-#        replicas: 1
-#        inputVars:
-#          podReplicas: 100
-#
-#      - objectTemplate: client.yml
-#        replicas: 1
-#        inputVars:
-#          podReplicas: 100
-#
-#      - objectTemplate: virtualservice.yml
-#        replicas: 1
-#        inputVars:
-#          dstPort: 8080 # Can be either 8080 (http) or 8443 (https)
-#
-#      - objectTemplate: destination-rule.yml
-#        replicas: 1
-#
-#      - objectTemplate: service.yml
-#        replicas: 1
+  - name: rps-80k
+    namespace: envoy-scale
+    qps: 10
+    burst: 10
+    jobIterations: 8
+    waitWhenFinished: true
+    cleanup: false
+    jobPause: 2m
+    preLoadImages: false
+    verifyObjects: false
+    namespacedIterations: true
+    objects:
+      - objectTemplate: gen-load.yml
+        replicas: 1
+        inputVars:
+          rps: 100       # Per pod RPS
+          protocol: http  # Can be either http or https
+          http2: true
+
+      - objectTemplate: server.yml
+        replicas: 1
+        inputVars:
+          podReplicas: 100
+
+      - objectTemplate: client.yml
+        replicas: 1
+        inputVars:
+          podReplicas: 100
+
+      - objectTemplate: virtualservice.yml
+        replicas: 1
+        inputVars:
+          dstPort: 8080 # Can be either 8080 (http) or 8443 (https)
+
+      - objectTemplate: destination-rule.yml
+        replicas: 1
+
+      - objectTemplate: service.yml
+        replicas: 1
 
 
-#  - name: rps-160k
-#    namespace: envoy-scale
-#    qps: 10
-#    burst: 10
-#    jobIterations: 16
-#    waitWhenFinished: true
-#    cleanup: false
-#    jobPause: 2m
-#    preLoadImages: false
-#    verifyObjects: false
-#    namespacedIterations: true
-#    namespaceLabels:
-#      istio-injection: enabled
-#    objects:
-#      - objectTemplate: gen-load.yml
-#        replicas: 1
-#        inputVars:
-#          rps: 100       # Per pod RPS
-#          protocol: http # Can be either http or https
-#          http2: true
-#
-#      - objectTemplate: server.yml
-#        replicas: 1
-#        inputVars:
-#          podReplicas: 100
-#
-#      - objectTemplate: client.yml
-#        replicas: 1
-#        inputVars:
-#          podReplicas: 100
-#
-#      - objectTemplate: virtualservice.yml
-#        replicas: 1
-#        inputVars:
-#          dstPort: 8080 # Can be either 8080 (http) or 8443 (https)
-#
-#      - objectTemplate: destination-rule.yml
-#        replicas: 1
-#
-#      - objectTemplate: service.yml
-#        replicas: 1
+  - name: rps-160k
+    namespace: envoy-scale
+    qps: 10
+    burst: 10
+    jobIterations: 16
+    waitWhenFinished: true
+    cleanup: false
+    jobPause: 2m
+    preLoadImages: false
+    verifyObjects: false
+    namespacedIterations: true
+    objects:
+      - objectTemplate: gen-load.yml
+        replicas: 1
+        inputVars:
+          rps: 100       # Per pod RPS
+          protocol: http  # Can be either http or https
+          http2: true
+
+      - objectTemplate: server.yml
+        replicas: 1
+        inputVars:
+          podReplicas: 100
+
+      - objectTemplate: client.yml
+        replicas: 1
+        inputVars:
+          podReplicas: 100
+
+      - objectTemplate: virtualservice.yml
+        replicas: 1
+        inputVars:
+          dstPort: 8080 # Can be either 8080 (http) or 8443 (https)
+
+      - objectTemplate: destination-rule.yml
+        replicas: 1
+
+      - objectTemplate: service.yml
+        replicas: 1
