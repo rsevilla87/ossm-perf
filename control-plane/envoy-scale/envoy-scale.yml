@@ -111,7 +111,7 @@ jobs:
     jobIterations: 4
     waitWhenFinished: true
     cleanup: false
-    jobPause: 2m
+    jobPause: 3m
     preLoadImages: false
     verifyObjects: false
     namespacedIterations: true
@@ -151,7 +151,7 @@ jobs:
     jobIterations: 8
     waitWhenFinished: true
     cleanup: false
-    jobPause: 2m
+    jobPause: 4m
     preLoadImages: false
     verifyObjects: false
     namespacedIterations: true
@@ -192,7 +192,7 @@ jobs:
     jobIterations: 16
     waitWhenFinished: true
     cleanup: false
-    jobPause: 2m
+    jobPause: 8m
     preLoadImages: false
     verifyObjects: false
     namespacedIterations: true
