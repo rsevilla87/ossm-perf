@@ -3,7 +3,7 @@
 # First scenario is configured as warmup and it will also tune the default ingress-controller to assign the router pods to the infra nodes
 - termination: http
   connections: 200
-  samples: 3
+  samples: 5
   duration: 3m
   path: /1024.html
   concurrency: 9
@@ -17,7 +17,7 @@
 - termination: http
   connections: 200
   samples: 2
-  duration: 3m
+  duration: 5m
   path: /1024.html
   concurrency: 9
   tool: wrk
@@ -28,7 +28,7 @@
 - termination: edge
   connections: 200
   samples: 2
-  duration: 3m
+  duration: 5m
   path: /1024.html
   concurrency: 9
   tool: wrk
