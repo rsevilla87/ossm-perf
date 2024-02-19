@@ -36,9 +36,11 @@ It creates a single namespace `node-density-sm` with a defined number of "naked"
 
 To enable sidecar injection, projects/namespaces created by this workload are labeled with `istio-injection: enabled`, and the pods created in these namespaces are annotated with `sidecar.istio.io/inject: "true"`
 
-Density of 200 pods per node,
+Density of 220 pods per node,
 
-We're currently using m5.2xlarge/m6i.2xlarge instances which have 32 GiB of memory, each `node-density-sm` pod has a memory requests of `138Mi`.
+```shell
+./run.sh --pods-per-node=220
+```
 
 ### KPIs
 
@@ -48,3 +50,21 @@ We're currently using m5.2xlarge/m6i.2xlarge instances which have 32 GiB of memo
   - `istiod` CPU & memory usage
   - `Prometheus` CPU & memory usage
   - `istio-proxy` CPU & memory usage
+
+## Envoy-scale
+
+Creates a series of namespaces each one with 100 client and 100 server pods serving static content, where the clients perform a constant rate of requests per second over the servers. The client-server communication is backed by a k8s service, a virtualservice and a destination rule using the LEAST_REQUEST balancing strategy.
+The benchmark is divided into multiple jobs, starting from the smaller scale and growing exponentially to the biggest, the aim of this is to evaluate how envoy scales with the number of cluster-wide requests per second and pods.
+
+It can be executed with:
+
+```shell
+./run.sh
+```
+
+### KPIs
+
+- Pass/Fail of the test
+- `Istio-proxy` CPU usage / 1k requests
+- `Istio-proxy` memory usage
+- Istio control plane
