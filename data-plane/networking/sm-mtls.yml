@@ -29,6 +29,30 @@ tests:
   messagesize: 8192
   service: True
 
+- TCPStreamServiceSmall2:
+  parallelism: 2
+  profile: "TCP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 64
+  service: True
+
+- TCPStreamServiceMed2:
+  parallelism: 2
+  profile: "TCP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 1024
+  service: True
+
+- TCPStreamServiceLarge2:
+  parallelism: 2
+  profile: "TCP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 8192
+  service: True
+
 # UDP
 
 - UDPStreamServiceSmall:
@@ -49,6 +73,30 @@ tests:
 
 - UDPStreamServiceLarge:
   parallelism: 1
+  profile: "UDP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 8192
+  service: True
+
+- UDPStreamServiceSmall2:
+  parallelism: 2
+  profile: "UDP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 64
+  service: True
+
+- UDPStreamServiceMed2:
+  parallelism: 2
+  profile: "UDP_STREAM"
+  duration: 30
+  samples: 2
+  messagesize: 1024
+  service: True
+
+- UDPStreamServiceLarge2:
+  parallelism: 2
   profile: "UDP_STREAM"
   duration: 30
   samples: 2
