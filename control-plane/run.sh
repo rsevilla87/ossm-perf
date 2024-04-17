@@ -3,37 +3,39 @@
 set -e
 set -o pipefail
 
-KUBE_BURNER_VERSION=1.1.0
+KUBE_BURNER_VERSION=1.2.3
 KUBE_DIR=${KUBE_DIR:-/tmp}
 KUBE_BURNER_URL="https://github.com/kube-burner/kube-burner-ocp/releases/download/v${KUBE_BURNER_VERSION}/kube-burner-ocp-V${KUBE_BURNER_VERSION}-linux-x86_64.tar.gz"
 PROMETHEUS_HOST=https://$(oc get route -n openshift-monitoring prometheus-k8s -o go-template="{{.spec.host}}")
 PROMETHEUS_ISTIO_HOST=https://$(oc get route -n istio-system prometheus -o go-template="{{.spec.host}}")
-PROMETHEUS_PASSWORD=$(oc get secret/htpasswd -n istio-system -o go-template="{{.data.rawPassword|base64decode}}")
+PROMETHEUS_ISTIO_PASSWORD=$(oc get secret/htpasswd -n istio-system -o go-template="{{.data.rawPassword|base64decode}}")
+ES_INDEX=${ES_INDEX:-kube-burner}
 TOKEN=$(oc sa new-token -n openshift-monitoring prometheus-k8s)
 WORKLOAD=${WORKLOAD:?}
 EXTRA_FLAGS=${EXTRA_FLAGS:-}
 PODS_PER_NODE=${PODS_PER_NODE:-220}
+WORKER_COUNT=$(oc get node -l node-role.kubernetes.io/worker,node-role.kubernetes.io/master!=,node-role.kubernetes.io/infra!= --no-headers | wc -l)
+JOB_ITERATIONS=$((WORKER_COUNT * 9))
 
 export PROMETHEUS_HOST PROMETHEUS_ISTIO_HOST PROMETHEUS_PASSWORD TOKEN
-
-cd ${WORKLOAD}
 
 if [[ ! -f /tmp/kube-burner-ocp ]]; then
    curl --fail --retry 8 --retry-all-errors -sS -L "${KUBE_BURNER_URL}" | tar -xzC "${KUBE_DIR}/" kube-burner-ocp
 fi
 
-
-if [[ ${WORKLOAD} =~ cluster-density-sm|envoy-scale ]]; then
-  WORKLOAD="cluster-density-v2"
-elif [[ ${WORKLOAD} == "node-density-sm" ]]; then
-  WORKLOAD="node-density"
+if [[ ${WORKLOAD} == "node-density-sm" ]]; then
+  cmd="${KUBE_DIR}/kube-burner-ocp node-density --pods-per-node=${PODS_PER_NODE}"
+  cd node-density-sm
+else
+  cmd="${KUBE_DIR}/kube-burner-ocp init -b ${WORKLOAD} -c ${WORKLOAD}.yml"
+  cd ${WORKLOAD}
 fi
 
-cmd="/tmp/kube-burner-ocp ${WORKLOAD} ${EXTRA_FLAGS}"
 # If ES_SERVER is specified
 if [[ -n ${ES_SERVER} ]]; then
-  cmd+=" --es-server=${ES_SERVER} --es-index=${ES_INDEX}"
+  cmd+=" --es-server=${ES_SERVER} --es-index=${ES_INDEX} --metrics-endpoint=metrics-endpoint.yml"
 fi
+cmd+=" ${EXTRA_FLAGS}"
 
 echo ${cmd}
 ${cmd}

@@ -1,7 +1,8 @@
 - endpoint: {{.PROMETHEUS_HOST}}
   profile: metrics.yml
   token: {{.TOKEN}}
+  alertProfile: alerts.yml
 - endpoint: {{.PROMETHEUS_ISTIO_HOST}}
   profile: istio-metrics.yml
   username: internal
-  password: {{.PROMETHEUS_PASSWORD}}
+  password: {{.PROMETHEUS_ISTIO_PASSWORD}}

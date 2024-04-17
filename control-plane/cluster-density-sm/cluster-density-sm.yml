@@ -9,10 +9,6 @@ global:
     type: {{.INDEXING_TYPE}}
   measurements:
     - name: podLatency
-      thresholds:
-        - conditionType: Ready
-          metric: P99
-          threshold: {{.POD_READY_THRESHOLD}}
 jobs:
 
   - name: create-namespaces
