@@ -22,18 +22,6 @@ spec:
     type: Istiod
   profiles:
   - default
-  runtime:
-    defaults:
-      pod:
-        nodeSelector:
-          node-role.kubernetes.io/infra: ""
-        tolerations:
-        - effect: NoSchedule
-          key: node-role.kubernetes.io/infra
-          value: reserved
-        - effect: NoExecute
-          key: node-role.kubernetes.io/infra
-          value: reserved
   security:
     dataPlane:
       mtls: true
