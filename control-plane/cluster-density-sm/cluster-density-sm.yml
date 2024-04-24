@@ -35,10 +35,6 @@ jobs:
     waitWhenFinished: true
     preLoadImages: true
     preLoadPeriod: 10s
-    churn: {{.CHURN}}
-    churnDuration: {{.CHURN_DURATION}}
-    churnPercent: {{.CHURN_PERCENT}}
-    churnDelay: {{.CHURN_DELAY}}
     jobPause: 2m
     objects:
 
