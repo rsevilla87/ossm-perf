@@ -1,4 +1,4 @@
-NETPERF_VERSION=0.1.21
+NETPERF_VERSION=0.1.22
 SIDECAR=${SIDECAR:?}
 curl -sSL https://github.com/cloud-bulldozer/k8s-netperf/releases/download/v${NETPERF_VERSION}/k8s-netperf_Linux_v${NETPERF_VERSION}_x86_64.tar.gz | tar xzf - k8s-netperf
 oc create ns netperf 2>/dev/null
@@ -9,8 +9,8 @@ fi
 oc create sa netperf -n netperf
 oc adm policy add-scc-to-user hostnetwork -z netperf -n netperf
 if [[ $2 != "" ]]; then
-  ./k8s-netperf --all --config ${1} --search ${2} --clean=false
+  ./k8s-netperf --all --config ${1} --search ${2} --clean=false --csv=false
 else
-  ./k8s-netperf --all --config ${1} --clean=false
+  ./k8s-netperf --all --config ${1} --clean=false --csv=false
 fi
 oc delete ns netperf
