@@ -9,8 +9,10 @@ fi
 oc create sa netperf -n netperf
 oc adm policy add-scc-to-user hostnetwork -z netperf -n netperf
 if [[ $2 != "" ]]; then
-  ./k8s-netperf --all --config ${1} --search ${2} --clean=false --csv=false
+ cmd="./k8s-netperf --all --config ${1} --search ${2} --clean=false --csv=false"
 else
-  ./k8s-netperf --all --config ${1} --clean=false --csv=false
+  cmd="./k8s-netperf --all --config ${1} --clean=false --csv=false"
 fi
+echo ${cmd}
+${cmd}
 oc delete ns netperf
