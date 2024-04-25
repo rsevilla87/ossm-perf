@@ -1,8 +1,12 @@
 # Control-plane scale tests
 
+## Global environment variables
+
+Enable indexing with `ES_SERVER` and `ES_INDEX` and append extra flags to `kube-burner-ocp` with `EXTRA_FLAG`
+
 ## Cluster-density Service Mesh
 
-It contains two jobs. First one, `gateway-route` creates a route in the `istio-system` namespace that will be used by the readiness probes of the client pods
+It contains two jobs. First one, `create-namespaces` creates the required namespaces of the benchmark: 
 
 Second job, `cluster-density-sm`, creates the following objects per namespace:
 
@@ -14,9 +18,15 @@ Second job, `cluster-density-sm`, creates the following objects per namespace:
 - 2 services backed by the nginx pods
 - 2 virtualservices pointing to the previous services
 - 1 configmap mounted by the clients that contains the load generation script
-- 1 route pointing to the ingress gateway in istio-system. These routes are actually created in the istio-system namespace and use the gateway hostname to forward traffic to the .
+- 1 route pointing to the ingress gateway in istio-system. These routes are actually created in the istio-system namespace and are configured with the the gateway hostname.
 
 To enable sidecar injection, projects/namespaces created by this workload are labeled with `istio-injection: enabled`, and the pods created in these namespaces are annotated with `sidecar.istio.io/inject: "true"`.
+
+Run it with:
+
+```shell
+WORKLOAD=cluster-density-sm ./run.sh
+```
 
 ### KPIs
 
@@ -36,10 +46,12 @@ It creates a single namespace `node-density-sm` with a defined number of "naked"
 
 To enable sidecar injection, projects/namespaces created by this workload are labeled with `istio-injection: enabled`, and the pods created in these namespaces are annotated with `sidecar.istio.io/inject: "true"`
 
-Density of 220 pods per node,
+By default it creates 220 pods per node, this value can be tuned through the env var `PODS_PER_NODE`.
+
+Run it with:
 
 ```shell
-./run.sh --pods-per-node=220
+WORKLOAD=node-density-sm ./run.sh
 ```
 
 ### KPIs
@@ -59,7 +71,7 @@ The benchmark is divided into multiple jobs, starting from the smaller scale and
 It can be executed with:
 
 ```shell
-./run.sh
+WORKLOAD=envoy-scale ./run.sh
 ```
 
 ### KPIs
@@ -68,3 +80,4 @@ It can be executed with:
 - `Istio-proxy` CPU usage / 1k requests
 - `Istio-proxy` memory usage
 - Istio control plane
+
