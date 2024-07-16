@@ -3,11 +3,11 @@
 ## Global environment variables
 
 These benchmarks are executed with the help of the [kube-burner](https://github.com/kube-burner/kube-burner) plugin, [kube-burner-ocp](https://github.com/kube-burner/kube-burner-ocp). Cluster authentication is configured by `KUBECONFIG`, by default `kube-burner` looks for it in `${HOME}/.kube/config`
-Enable indexing with `ES_SERVER` and `ES_INDEX` and append extra flags to `kube-burner-ocp` with `EXTRA_FLAG`
+Indexing is enabled by default thanks to the variables `ES_SERVER` and `ES_INDEX` and append extra flags to `kube-burner-ocp` with `EXTRA_FLAGS`
 
 ## Cluster-density Service Mesh
 
-It contains two jobs. First one, `create-namespaces` creates the required namespaces of the benchmark.
+It contains two jobs. First one, `create-namespaces` creates the required namespaces (9 namespaces per worker node) of the benchmark.
 
 Second job, `cluster-density-sm`, creates the following objects per namespace:
 

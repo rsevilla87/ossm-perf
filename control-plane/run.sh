@@ -3,12 +3,13 @@
 set -e
 set -o pipefail
 
-KUBE_BURNER_VERSION=1.2.3
+KUBE_BURNER_VERSION=1.3.0
 KUBE_DIR=${KUBE_DIR:-/tmp}
 KUBE_BURNER_URL="https://github.com/kube-burner/kube-burner-ocp/releases/download/v${KUBE_BURNER_VERSION}/kube-burner-ocp-V${KUBE_BURNER_VERSION}-linux-x86_64.tar.gz"
 PROMETHEUS_HOST=https://$(oc get route -n openshift-monitoring prometheus-k8s -o go-template="{{.spec.host}}")
 PROMETHEUS_ISTIO_HOST=https://$(oc get route -n istio-system prometheus -o go-template="{{.spec.host}}")
 PROMETHEUS_ISTIO_PASSWORD=$(oc get secret/htpasswd -n istio-system -o go-template="{{.data.rawPassword|base64decode}}")
+ES_SERVER=${ES_SERVER=https://search-perfscale-dev-chmf5l4sh66lvxbnadi4bznl3a.us-west-2.es.amazonaws.com}
 ES_INDEX=${ES_INDEX:-kube-burner}
 TOKEN=$(oc sa new-token -n openshift-monitoring prometheus-k8s)
 WORKLOAD=${WORKLOAD:?}
@@ -26,15 +27,14 @@ fi
 
 if [[ ${WORKLOAD} == "node-density-sm" ]]; then
   cmd="${KUBE_DIR}/kube-burner-ocp node-density --pods-per-node=${PODS_PER_NODE}"
-  cd node-density-sm
 else
-  cmd="${KUBE_DIR}/kube-burner-ocp init -b ${WORKLOAD} -c ${WORKLOAD}.yml"
-  cd ${WORKLOAD}
+  cmd="${KUBE_DIR}/kube-burner-ocp init -c ${WORKLOAD}.yml"
 fi
+cd ${WORKLOAD}
 
 # If ES_SERVER is specified
 if [[ -n ${ES_SERVER} ]]; then
-  cmd+=" --es-server=${ES_SERVER} --es-index=${ES_INDEX} --metrics-endpoint=metrics-endpoint.yml"
+  cmd+=" --metrics-endpoint=metrics-endpoint.yml"
 fi
 cmd+=" ${EXTRA_FLAGS}"
 
