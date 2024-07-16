@@ -4,13 +4,7 @@ global:
   gcMetrics: {{.GC_METRICS}}
   measurements:
     - name: podLatency
-indexers:
-  - esServers: ["{{.ES_SERVER}}"]
-    insecureSkipVerify: true
-    defaultIndex: {{.ES_INDEX}}
-    type: {{.INDEXING_TYPE}}
 jobs:
-
   - name: create-namespaces
     namespace: create-namespaces
     qps: 10

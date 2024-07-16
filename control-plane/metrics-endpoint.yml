@@ -1,8 +1,21 @@
 - endpoint: {{.PROMETHEUS_HOST}}
-  profile: metrics.yml
   token: {{.TOKEN}}
-  alertProfile: alerts.yml
+  metrics:
+    - metrics.yml
+  alerts:
+    - alerts.yml
+  indexer:
+    esServers: ["{{.ES_SERVER}}"]
+    insecureSkipVerify: true
+    defaultIndex: {{.ES_INDEX}}
+    type: opensearch
 - endpoint: {{.PROMETHEUS_ISTIO_HOST}}
-  profile: istio-metrics.yml
   username: internal
   password: {{.PROMETHEUS_ISTIO_PASSWORD}}
+  metrics:
+    - metrics.yml
+  indexer:
+    esServers: ["{{.ES_SERVER}}"]
+    insecureSkipVerify: true
+    defaultIndex: {{.ES_INDEX}}
+    type: opensearch

@@ -2,13 +2,7 @@
 global:
   gc: {{.GC}}
   gcMetrics: {{.GC_METRICS}}
-indexers:
-  - esServers: ["{{.ES_SERVER}}"]
-    insecureSkipVerify: true
-    defaultIndex: {{.ES_INDEX}}
-    type: {{.INDEXING_TYPE}}
 jobs:
-
   - name: envoy-scale
     namespace: envoy-scale
     qps: 10
