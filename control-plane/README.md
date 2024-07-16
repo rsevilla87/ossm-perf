@@ -2,22 +2,23 @@
 
 ## Global environment variables
 
+These benchmarks are executed with the help of the [kube-burner](https://github.com/kube-burner/kube-burner) plugin, [kube-burner-ocp](https://github.com/kube-burner/kube-burner-ocp). Cluster authentication is configured by `KUBECONFIG`, by default `kube-burner` looks for it in `${HOME}/.kube/config`
 Enable indexing with `ES_SERVER` and `ES_INDEX` and append extra flags to `kube-burner-ocp` with `EXTRA_FLAG`
 
 ## Cluster-density Service Mesh
 
-It contains two jobs. First one, `create-namespaces` creates the required namespaces of the benchmark: 
+It contains two jobs. First one, `create-namespaces` creates the required namespaces of the benchmark.
 
 Second job, `cluster-density-sm`, creates the following objects per namespace:
 
-- 2 deployments with 2 replicas using: `quay.io/cloud-bulldozer/nginx:latest` (Server).
-- 2 deployments with 2 replicas using: `quay.io/cloud-bulldozer/hloader:latest` (Client). The pods in this deployment have configured:
+- 2 deployments with 2 pod replicas using: `quay.io/cloud-bulldozer/nginx:latest` (Server).
+- 2 deployments with 2 pod replicas using: `quay.io/cloud-bulldozer/hloader:latest` (Client). The pods in this deployment have configured:
   - A `readinessProbe` that cURLs one of the services and the route pointing to the ingress gateway.
-  - A constant load generation script that performs 50 HTTP rps against one of the services
+  - A command that runs a constant load generation script that performs 50 HTTP rps against one of the services
 - 1 gateway
 - 2 services backed by the nginx pods
-- 2 virtualservices pointing to the previous services
-- 1 configmap mounted by the clients that contains the load generation script
+- 1 virtualservices pointing to the previous services
+- 2 configmap mounted by the clients that contains the load generation script
 - 1 route pointing to the ingress gateway in istio-system. These routes are actually created in the istio-system namespace and are configured with the the gateway hostname.
 
 To enable sidecar injection, projects/namespaces created by this workload are labeled with `istio-injection: enabled`, and the pods created in these namespaces are annotated with `sidecar.istio.io/inject: "true"`.
@@ -80,4 +81,3 @@ WORKLOAD=envoy-scale ./run.sh
 - `Istio-proxy` CPU usage / 1k requests
 - `Istio-proxy` memory usage
 - Istio control plane
-
